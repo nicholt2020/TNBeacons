@@ -1,0 +1,1 @@
+{"plugins":["cordova-plugin-eddystone","cordova-plugin-ble","cordova-plugin-whitelist","de.appplant.cordova.plugin.local-notification","cordova-plugin-device","cordova-plugin-app-event"]}
