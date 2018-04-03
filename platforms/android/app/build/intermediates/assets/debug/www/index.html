@@ -5,7 +5,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, user-scalable=no
 		initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
-	<title>TeamOne Beacons</title>
+	<title>TNBeacons</title>
 
 	<script>
 	// Redirect console.log when running from Evothings Workbench.
@@ -36,7 +36,7 @@
 <body>
     <center>
         <img src="img/icon.png" height="116" width="116"/>
-        <h2>TeamOne Beacons</h2>
+        <h2>TNBeacons</h2>
     </center>
 	<p id="message">Preparing...</p>
 
@@ -57,6 +57,7 @@
 			setTimeout(startScan, 500);
 			// Timer that refreshes the display.
 			timer = setInterval(updateBeaconList, 500);
+			localNotification();
 		}
 		function onBackButtonDown()
 		{
@@ -80,11 +81,11 @@
         }
         function localNotification()
         {
-            cordova.plugins.notification.local.schedule({
-                title: 'TeamOne Beacons',
+            window.cordova.plugins.notification.local.schedule({
+                title: 'TNBeacons',
+				firstAt: new Date(new Date().getTime() + 5*1000),
+				every: 1,
                 text: 'Nearby beacons are displayed!',
-                foreground: true,
-                trigger: { in: 1, unit: 'hour' },
                 icon: ['file://img/icon.png']
             });
         }
@@ -124,20 +125,16 @@
 				return accuracy;
 			}
             //showMessage(beacon.name + "'s distance is " + accuracy);//said tif60 distance is null
-            // return accuracy;
+            // return accuracy;gs.eddystone.calculateAccuracy(beacon.txPower, beacon.rssi);
+			return accuracy;
         }
+		
 		function getSortedBeaconList(beacons)
 		{
             var beaconList = [];
 			for (var key in beacons)
 			{
 				beaconList.push(beacons[key]);
-            }
-            if( beaconList != null){
-                localNotification();
-            }
-            else{
-                showMessage("There are no beacons available!");
             }
 			beaconList.sort(function(beacon1, beacon2, beacon3)
 			{
@@ -150,20 +147,21 @@
                 //     distance3: evothings.eddystone.calculateAccuracy(beacon3.txPower, beacon3.rssi)
                 // };
 
-                // var closestBeacon = null;
+                var closestBeacon = null;
 
-                // if(mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon3.rssi)){
-                //     closestBeacon = mapBeaconRSSI(beacon1.name);
-                // }
-                // else if(mapBeaconRSSI(beacon2.rssi) > mapBeaconRSSI(beacon1.rssi) && mapBeaconRSSI(beacon2.rssi) > mapBeaconRSSI(beacon3.rssi)){
-                //     closestBeacon = mapBeaconRSSI(beacon2.name);
-                // }
-                // else if(mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon1.rssi)){
-                //     closestBeacon = mapBeaconRSSI(beacon3.name);
-                // }
+                if(mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon3.rssi)){
+                    closestBeacon = mapBeaconRSSI(beacon1.rssi);
+                }
+                else if(mapBeaconRSSI(beacon2.rssi) > mapBeaconRSSI(beacon1.rssi) && mapBeaconRSSI(beacon2.rssi) > mapBeaconRSSI(beacon3.rssi)){
+                    closestBeacon = mapBeaconRSSI(beacon2.rssi);
+                }
+                else if(mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon1.rssi)){
+                    closestBeacon = mapBeaconRSSI(beacon3.rssi);
+                }
                 // showMessage("The closest beacon is " + closestBeacon);
-                // return closestBeacon;
-				return mapAccuracy(beacon1, beacon1.txPower, beacon1.rssi);
+                return closestBeacon;
+				//return mapBeaconRSSI(beacon1.rssi < mapBeaconRSSI(beacon2.rssi));
+				//return mapAccuracy(beacon1, beacon1.txPower, beacon1.rssi);
 			});
 			return beaconList;
 		}

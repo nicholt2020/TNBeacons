@@ -7,24 +7,21 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-eddystone": {
-      "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
-    },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
-    },
     "de.appplant.cordova.plugin.local-notification": {
+      "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
+    },
+    "cordova-plugin-eddystone": {
       "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
     }
   },
   "dependent_plugins": {
-    "cordova-plugin-ble": {
-      "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
-    },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
     },
     "cordova-plugin-app-event": {
+      "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
+    },
+    "cordova-plugin-ble": {
       "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
     }
   }

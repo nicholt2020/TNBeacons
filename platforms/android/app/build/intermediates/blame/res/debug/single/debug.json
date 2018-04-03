@@ -8,12 +8,12 @@
         "source": "/Users/tnichol3/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.0.aar/ae4ad7334525c355ccf6d47ec7469c0b/res/layout/notification_template_lines_media.xml"
     },
     {
-        "merged": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_icon.png.flat",
-        "source": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/src/main/res/mipmap-xxhdpi/icon.png"
-    },
-    {
         "merged": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/build/intermediates/res/merged/debug/layout_notification_template_big_media.xml.flat",
         "source": "/Users/tnichol3/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.0.aar/ae4ad7334525c355ccf6d47ec7469c0b/res/layout/notification_template_big_media.xml"
+    },
+    {
+        "merged": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/build/intermediates/res/merged/debug/mipmap-xxhdpi_icon.png.flat",
+        "source": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/src/main/res/mipmap-xxhdpi/icon.png"
     },
     {
         "merged": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/build/intermediates/res/merged/debug/mipmap-ldpi_icon.png.flat",

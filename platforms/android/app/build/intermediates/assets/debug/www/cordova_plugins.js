@@ -9,19 +9,19 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-eddystone.eddystoneplugin",
-    "file": "plugins/cordova-plugin-eddystone/js/eddystone-plugin.js",
-    "pluginId": "cordova-plugin-eddystone",
-    "clobbers": [
-      "evothings.eddystone"
-    ]
-  },
-  {
     "id": "cordova-plugin-device.device",
     "file": "plugins/cordova-plugin-device/www/device.js",
     "pluginId": "cordova-plugin-device",
     "clobbers": [
       "device"
+    ]
+  },
+  {
+    "id": "cordova-plugin-eddystone.eddystoneplugin",
+    "file": "plugins/cordova-plugin-eddystone/js/eddystone-plugin.js",
+    "pluginId": "cordova-plugin-eddystone",
+    "clobbers": [
+      "evothings.eddystone"
     ]
   },
   {
@@ -55,12 +55,12 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-  "cordova-plugin-ble": "2.0.1",
-  "cordova-plugin-eddystone": "1.3.0",
-  "cordova-plugin-whitelist": "1.3.3",
-  "cordova-plugin-device": "2.0.1",
   "cordova-plugin-app-event": "1.2.1",
-  "de.appplant.cordova.plugin.local-notification": "0.8.5"
+  "cordova-plugin-ble": "2.0.1",
+  "cordova-plugin-device": "2.0.1",
+  "cordova-plugin-eddystone": "1.3.0",
+  "de.appplant.cordova.plugin.local-notification": "0.8.5",
+  "cordova-plugin-console": "1.1.0"
 };
 // BOTTOM OF METADATA
 });
