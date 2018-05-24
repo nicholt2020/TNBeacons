@@ -48,20 +48,26 @@
 	<script>
 	var beacons = {};
 	var timer = null;
+	var active;
 
 	function x(){
+		localNotification();
 		onDeviceReady();
 	}
 	
 	function onDeviceReady(){
 		// Start tracking beacons!
 		//document.writeln("2");
+		test();
+		active = cordova.plugins.backgroundMode.isActive();
+		document.writeln(active);
 		setTimeout(startScan, 500);
 		// Timer that refreshes the display.
 		timer = setInterval(updateBeaconList, 500);
 		//document.writeln(timer);
 		//localNotification();
-		//test();
+		
+		//cordova.plugins.backgroundMode.setEnabled(false);
 		//displayLocalNotification();
 	}
 		// function testNotification()
@@ -82,12 +88,24 @@
 ////////////////////////////////////////////////////////////////////////
 	function test(){
 		//localNotification();
+		//document.writeln("BACKGROUND");		
 		cordova.plugins.backgroundMode.setEnabled(true);
-		//document.writeln("NOT ACTIVE");
-		if(cordova.plugins.backgroundMode.isActive()){
-			//document.writeln("ACTIVE");
+		cordova.plugins.backgroundMode.moveToBackground();
+		if(active == true){
+			localNotification();
+			showMessage("Showing background");
 		}
 		cordova.plugins.backgroundMode.setEnabled(false);
+		
+		//cordova.plugins.backgroundMode.moveToBackground();
+		
+		// if(cordova.plugins.backgroundMode.isActive()){
+		// 	localNotification();
+		// 	//document.writeln("BACKGROUND");
+		// }
+		//document.writeln("NOT ACTIVE");
+		// if(cordova.plugins.backgroundMode.isActive()){
+			//document.writeln("ACTIVE");
 		// 		'activate', function() {
 		// 	app.onModeActivated;
 		// 	cordova.plugins.backgroundMode.disableWebViewOptimizations();
@@ -104,33 +122,35 @@
 // 			cordova.plugins.backgroundMode.moveToBackground();
 // 	});
 	function startScan(){
-		showMessage('Starting scan...');
-		// document.writeln("SCAN");
-		//var closestBeacon = getSortedBeaconList(beacons);
-		//document.writeln(closestBeacon);
-		evothings.eddystone.startScan(function(beacon){
-			// Update beacon data.
-			beacon.timeStamp = Date.now();
-			beacons[beacon.address] = beacon;
-		}, function(error){
-				showMessage('Eddystone scan error: ' + error);
-		});
+		while(active == true){
+			showMessage('Starting scan...');
+			// document.writeln("SCAN");
+			//var closestBeacon = getSortedBeaconList(beacons);
+			//document.writeln(closestBeacon);
+			evothings.eddystone.startScan(function(beacon){
+				// Update beacon data.
+				beacon.timeStamp = Date.now();
+				beacons[beacon.address] = beacon;
+			}, function(error){
+					showMessage('Eddystone scan error: ' + error);
+			});
+		}
 	}
 // 		function displayLocalNotification(){
 // 			if(getSortedBeaconList() != lastScan() && getSortedBeaconList != null){
 // 				setTimeout(localNotification, 500);
 // 			}
 // 		}
-//         function localNotification()
-//         {
-//             window.cordova.plugins.notification.local.schedule({
-//                 title: 'TNBeacons',
-// 				firstAt: new Date(new Date().getTime() + 5*1000),
-// 				every: 1,
-//                 text: 'Test!',
-//                 icon: ['file://img/icon.png']
-//             });
-// 		}
+        function localNotification()
+        {
+            window.cordova.plugins.notification.local.schedule({
+                title: 'TTESTs',
+				firstAt: new Date(new Date().getTime() + 5*1000),
+				every: 1,
+                text: 'Its in the background',
+                icon: ['file://img/icon.png']
+            });
+		}
 
 		// Map the RSSI value to a value between 1 and 100.
 		function mapBeaconRSSI(rssi)
