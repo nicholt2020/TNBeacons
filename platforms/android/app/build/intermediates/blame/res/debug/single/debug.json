@@ -32,12 +32,12 @@
         "source": "/Users/tnichol3/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.0.aar/ae4ad7334525c355ccf6d47ec7469c0b/res/layout/notification_template_media_custom.xml"
     },
     {
-        "merged": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/build/intermediates/res/merged/debug/drawable-land-xxxhdpi_screen.png.flat",
-        "source": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/src/main/res/drawable-land-xxxhdpi/screen.png"
-    },
-    {
         "merged": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/build/intermediates/res/merged/debug/drawable-xhdpi-v4_notification_bg_normal.9.png.flat",
         "source": "/Users/tnichol3/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.0.aar/788a033ca15e1ed5292ccc0622385be3/res/drawable-xhdpi-v4/notification_bg_normal.9.png"
+    },
+    {
+        "merged": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/build/intermediates/res/merged/debug/drawable-land-xxxhdpi_screen.png.flat",
+        "source": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/src/main/res/drawable-land-xxxhdpi/screen.png"
     },
     {
         "merged": "/Users/tnichol3/Desktop/myCordovaPluginEddystone/platforms/android/app/build/intermediates/res/merged/debug/layout_notification_action.xml.flat",

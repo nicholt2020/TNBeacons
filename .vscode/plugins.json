@@ -1,1 +1,1 @@
-{"plugins":["cordova-plugin-ble","cordova-plugin-device","cordova-plugin-app-event","de.appplant.cordova.plugin.local-notification","cordova-plugin-eddystone","cordova-plugin-console"]}
+{"plugins":["cordova-plugin-ble","cordova-plugin-device","cordova-plugin-app-event","de.appplant.cordova.plugin.local-notification","cordova-plugin-eddystone","cordova-plugin-console","cordova-plugin-background-mode"]}

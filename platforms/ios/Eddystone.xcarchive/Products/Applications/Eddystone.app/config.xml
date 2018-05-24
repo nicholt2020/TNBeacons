@@ -29,6 +29,9 @@
     <feature name="BLE">
         <param name="ios-package" value="EVOBLE" />
     </feature>
+    <feature name="BackgroundMode">
+        <param name="ios-package" value="APPBackgroundMode" />
+    </feature>
     <name>Eddystone</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.

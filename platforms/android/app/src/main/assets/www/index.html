@@ -47,6 +47,7 @@
 	<script>
 	(function()
 	{
+		
 		// Dictionary of beacons.
 		var beacons = {};
 		// Timer that displays list of beacons.
@@ -57,7 +58,9 @@
 			setTimeout(startScan, 500);
 			// Timer that refreshes the display.
 			timer = setInterval(updateBeaconList, 500);
-			localNotification();
+			//cordova.plugins.backgroundMode.enable(displayLocalNotification());
+			//displayLocalNotification();
+			//cordova.plugins.backgroundMode.disable();
 		}
 		function onBackButtonDown()
 		{
@@ -79,6 +82,12 @@
 					showMessage('Eddystone scan error: ' + error);
 				});
         }
+		
+		function displayLocalNotification(){
+			if(getSortedBeaconList() != lastScan() && getSortedBeaconList != null){
+				setTimeout(localNotification, 500);
+			}
+		}
         function localNotification()
         {
             window.cordova.plugins.notification.local.schedule({
@@ -89,6 +98,15 @@
                 icon: ['file://img/icon.png']
             });
         }
+
+		function test(){
+			cordova.plugins.backgroundMode.setDefaults({
+			title: 'testing app',
+			text: 'test',
+			color: 'F14F4D', // hex format like 'F14F4D'
+			resume: false,
+		})
+		}
 		// Map the RSSI value to a value between 1 and 100.
 		function mapBeaconRSSI(rssi)
 		{
@@ -96,38 +114,32 @@
 			if (rssi < -100) return 100; // Max RSSI
 			return 100 + rssi;
         }
-        function mapAccuracy(beacon, txPower, rssi)
-        {
-			//txPower = txPower - 41;
-            //var accuracy = evothings.eddystone.calculateAccuracy(beacon.txPower, beacon.rssi);
-			if (!rssi || rssi >= 0 || !txPower)
-			{
-				return null;
+        
+
+		function displayNotification(){
+			cordova.plugins.backgroundMode.enable();
+			var tenMeters = 393.701;     //inches value for 10 meters
+			forEach(beacons in getSortedBeaconList) {
+				if(beacon.rssi < tenMeters && (beacon.timeStamp - getLastScan(beacon.eid)) > setMinutes(10)) {
+				setLastScan(beacon.eid);
+				localNotification();
+				}
 			}
 
-			// // Algorithm
-			// // http://developer.radiusnetworks.com/2014/12/04/fundamentals-of-beacon-ranging.html
-			// // http://stackoverflow.com/questions/21338031/radius-networks-ibeacon-ranging-fluctuation
+			setLastScan = function(eid) {
+				lastScanObject[eid] = Date.now();
+			}
 
-			// // The beacon distance formula uses txPower at 1 meters, but the Eddystone
-			// // protocol reports the value at 0 meters. 41dBm is the signal loss that
-			// // occurs over 1 meter, so we subtract that from the reported txPower.
-			txPower = txPower + 1;
-			var ratio = rssi * 1.0 / (txPower);
-			if (ratio < 1.0)
-			{
-				return Math.pow(ratio, 10);
+			getLastScan = function(eid) {
+				return lastScanObject[eid];
 			}
-			else
-			{
-				var accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
-				showMessage(beacon + "'s distance is " + accuracy);
-				return accuracy;
-			}
-            //showMessage(beacon.name + "'s distance is " + accuracy);//said tif60 distance is null
-            // return accuracy;gs.eddystone.calculateAccuracy(beacon.txPower, beacon.rssi);
-			return accuracy;
-        }
+		}
+
+		function lastScan(){
+			var lastScanList = [];
+			lastScanList = getSortedBeaconList();
+			return lastScanList;
+		}
 		
 		function getSortedBeaconList(beacons)
 		{
@@ -136,17 +148,9 @@
 			{
 				beaconList.push(beacons[key]);
             }
+
 			beaconList.sort(function(beacon1, beacon2, beacon3)
 			{
-                // var distance1 = evothings.eddystone.calculateAccuracy(beacon1.txPower, beacon1.rssi);
-                // var distance2 = evothings.eddystone.calculateAccuracy(beacon2.txPower, beacon2.rssi);
-                // var distance3 = evothings.eddystone.calculateAccuracy(beacon3.txPower, beacon3.rssi);
-                // return {
-                //     distance1: evothings.eddystone.calculateAccuracy(beacon1.txPower, beacon1.rssi),
-                //     distance2: evothings.eddystone.calculateAccuracy(beacon2.txPower, beacon2.rssi),
-                //     distance3: evothings.eddystone.calculateAccuracy(beacon3.txPower, beacon3.rssi)
-                // };
-
                 var closestBeacon = null;
 
                 if(mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon3.rssi)){
@@ -158,15 +162,13 @@
                 else if(mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon1.rssi)){
                     closestBeacon = mapBeaconRSSI(beacon3.rssi);
                 }
-                // showMessage("The closest beacon is " + closestBeacon);
                 return closestBeacon;
-				//return mapBeaconRSSI(beacon1.rssi < mapBeaconRSSI(beacon2.rssi));
-				//return mapAccuracy(beacon1, beacon1.txPower, beacon1.rssi);
 			});
 			return beaconList;
 		}
 		function updateBeaconList()
 		{
+			lastScan();
 			removeOldBeacons();
 			displayBeacons();
 		}

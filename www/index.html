@@ -43,52 +43,99 @@
 	<div id="found-beacons"></div>
 
 	<script src="cordova.js"></script>
+	<button onclick="x()">Start Scan</button>
 
 	<script>
-	(function()
-	{
+	function x(){
+		//document.writeln("YEA");
 		// Dictionary of beacons.
 		var beacons = {};
 		// Timer that displays list of beacons.
 		var timer = null;
-		function onDeviceReady()
-		{
-			// Start tracking beacons!
-			setTimeout(startScan, 500);
-			// Timer that refreshes the display.
-			timer = setInterval(updateBeaconList, 500);
-			localNotification();
+		onDeviceReady();
+	}
+	
+	function onDeviceReady(){
+		// Start tracking beacons!
+		//document.writeln("2");
+		setTimeout(startScan, 500);
+		// Timer that refreshes the display.
+		timer = setInterval(updateBeaconList, 500);
+		//document.writeln(timer);
+		//localNotification();
+		test();
+		//displayLocalNotification();
+	}
+		// function testNotification()
+        // {
+        //     window.cordova.plugins.notification.local.schedule({
+        //         title: 'Test',
+		// 		firstAt: new Date(new Date().getTime() + 5*1000),
+		// 		every: 1,
+        //         text: 'This is a test!',
+        //         icon: ['file://img/icon.png']
+        //     });
+		// }
+		// function test(){
+		// 	testNotification();
+		// 	var plugin = cordova.plugins.backgroundMode.setDefaults({ silent: true });
+		// 	plugin.setEnabled(!plugin.isEnabled());
+		// }
+////////////////////////////////////////////////////////////////////////
+	function test(){
+		//localNotification();
+		cordova.plugins.backgroundMode.setEnabled(true);
+		document.writeln("NOT ACTIVE");
+		if(cordova.plugins.backgroundMode.isActive()){
+			document.writeln("ACTIVE");
 		}
-		function onBackButtonDown()
-		{
-			evothings.eddystone.stopScan();
-			navigator.app.exitApp();
-		}
-		function startScan()
-		{
-			showMessage('Starting scan...');
-			evothings.eddystone.startScan(
-				function(beacon)
-				{
-					// Update beacon data.
-					beacon.timeStamp = Date.now();
-					beacons[beacon.address] = beacon;
-				},
-				function(error)
-				{
-					showMessage('Eddystone scan error: ' + error);
-				});
-        }
-        function localNotification()
-        {
-            window.cordova.plugins.notification.local.schedule({
-                title: 'TNBeacons',
-				firstAt: new Date(new Date().getTime() + 5*1000),
-				every: 1,
-                text: 'Nearby beacons are displayed!',
-                icon: ['file://img/icon.png']
-            });
-        }
+		cordova.plugins.backgroundMode.setEnabled(false);
+		// 		'activate', function() {
+		// 	app.onModeActivated;
+		// 	cordova.plugins.backgroundMode.disableWebViewOptimizations();
+		// 	cordova.plugins.backgroundMode.moveToBackground();
+		// });
+			// localNotification();
+            // plugin    = cordova.plugins.backgroundMode;
+			// plugin.setDefaults({ color: 'F14F4D' });
+			// plugin.setEnabled(true);
+
+	}
+
+// 		cordova.plugins.backgroundMode.isScreenOff(function(bool) {
+// 			cordova.plugins.backgroundMode.moveToBackground();
+// 	});
+// //////////////////////////////////////////////////////////////////////
+	function startScan(){
+		showMessage('Starting scan...');
+		// document.writeln("SCAN");
+		//var closestBeacon = getSortedBeaconList();
+		//document.writeln(closestBeacon);
+		evothings.eddystone.startScan(function(beacon){
+			// Update beacon data.
+			//test();
+			beacon.timeStamp = Date.now();
+			beacons[beacon.address] = beacon;
+		}, function(error){
+				showMessage('Eddystone scan error: ' + error);
+		});
+	}
+// 		function displayLocalNotification(){
+// 			if(getSortedBeaconList() != lastScan() && getSortedBeaconList != null){
+// 				setTimeout(localNotification, 500);
+// 			}
+// 		}
+//         function localNotification()
+//         {
+//             window.cordova.plugins.notification.local.schedule({
+//                 title: 'TNBeacons',
+// 				firstAt: new Date(new Date().getTime() + 5*1000),
+// 				every: 1,
+//                 text: 'Test!',
+//                 icon: ['file://img/icon.png']
+//             });
+// 		}
+
 		// Map the RSSI value to a value between 1 and 100.
 		function mapBeaconRSSI(rssi)
 		{
@@ -96,58 +143,18 @@
 			if (rssi < -100) return 100; // Max RSSI
 			return 100 + rssi;
         }
-        function mapAccuracy(beacon, txPower, rssi)
-        {
-			//txPower = txPower - 41;
-            //var accuracy = evothings.eddystone.calculateAccuracy(beacon.txPower, beacon.rssi);
-			if (!rssi || rssi >= 0 || !txPower)
-			{
-				return null;
-			}
-
-			// // Algorithm
-			// // http://developer.radiusnetworks.com/2014/12/04/fundamentals-of-beacon-ranging.html
-			// // http://stackoverflow.com/questions/21338031/radius-networks-ibeacon-ranging-fluctuation
-
-			// // The beacon distance formula uses txPower at 1 meters, but the Eddystone
-			// // protocol reports the value at 0 meters. 41dBm is the signal loss that
-			// // occurs over 1 meter, so we subtract that from the reported txPower.
-			txPower = txPower + 1;
-			var ratio = rssi * 1.0 / (txPower);
-			if (ratio < 1.0)
-			{
-				return Math.pow(ratio, 10);
-			}
-			else
-			{
-				var accuracy = (0.89976) * Math.pow(ratio, 7.7095) + 0.111;
-				showMessage(beacon + "'s distance is " + accuracy);
-				return accuracy;
-			}
-            //showMessage(beacon.name + "'s distance is " + accuracy);//said tif60 distance is null
-            // return accuracy;gs.eddystone.calculateAccuracy(beacon.txPower, beacon.rssi);
-			return accuracy;
-        }
 		
-		function getSortedBeaconList(beacons)
+		function getSortedBeaconList()
 		{
             var beaconList = [];
 			for (var key in beacons)
 			{
 				beaconList.push(beacons[key]);
-            }
+			}
+			var closestBeacon = null;
 			beaconList.sort(function(beacon1, beacon2, beacon3)
 			{
-                // var distance1 = evothings.eddystone.calculateAccuracy(beacon1.txPower, beacon1.rssi);
-                // var distance2 = evothings.eddystone.calculateAccuracy(beacon2.txPower, beacon2.rssi);
-                // var distance3 = evothings.eddystone.calculateAccuracy(beacon3.txPower, beacon3.rssi);
-                // return {
-                //     distance1: evothings.eddystone.calculateAccuracy(beacon1.txPower, beacon1.rssi),
-                //     distance2: evothings.eddystone.calculateAccuracy(beacon2.txPower, beacon2.rssi),
-                //     distance3: evothings.eddystone.calculateAccuracy(beacon3.txPower, beacon3.rssi)
-                // };
-
-                var closestBeacon = null;
+               
 
                 if(mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon3.rssi)){
                     closestBeacon = mapBeaconRSSI(beacon1.rssi);
@@ -158,20 +165,19 @@
                 else if(mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon1.rssi)){
                     closestBeacon = mapBeaconRSSI(beacon3.rssi);
                 }
-                // showMessage("The closest beacon is " + closestBeacon);
+				showMessage("The closest beacon is " + closestBeacon);
+				
                 return closestBeacon;
 				//return mapBeaconRSSI(beacon1.rssi < mapBeaconRSSI(beacon2.rssi));
-				//return mapAccuracy(beacon1, beacon1.txPower, beacon1.rssi);
 			});
 			return beaconList;
 		}
-		function updateBeaconList()
-		{
+		function updateBeaconList(){
 			removeOldBeacons();
 			displayBeacons();
-		}
-		function removeOldBeacons()
-		{
+		 }
+
+		function removeOldBeacons(){
 			var timeNow = Date.now();
 			for (var key in beacons)
 			{
@@ -183,8 +189,8 @@
 				}
 			}
 		}
-		function displayBeacons()
-		{
+
+		function displayBeacons(){
 			var html = '';
 			var sortedList = getSortedBeaconList(beacons);
 			for (var i = 0; i < sortedList.length; ++i)
@@ -205,70 +211,70 @@
 			}
 			document.querySelector('#found-beacons').innerHTML = html;
 		}
-		function htmlBeaconName(beacon)
-		{
-			var name = beacon.name || 'no name';
-			return '<strong>' + name + '</strong><br/>';
-		}
-		function htmlBeaconURL(beacon)
-		{
-			return beacon.url ?
-				'URL: ' + beacon.url + '<br/>' :  '';
-		}
-		function htmlBeaconURL(beacon)
-		{
-			return beacon.url ?
-				'URL: ' + beacon.url + '<br/>' :  '';
-        }
-        function htmlBeaconURL(beacon)
-		{
-			return beacon.url ?
-				'URL: ' + beacon.url + '<br/>' :  '';
-		}
-		function htmlBeaconNID(beacon)
-		{
-			return beacon.nid ?
-				'NID: ' + uint8ArrayToString(beacon.nid) + '<br/>' :  '';
-		}
-		function htmlBeaconBID(beacon)
-		{
-			return beacon.bid ?
-				'BID: ' + uint8ArrayToString(beacon.bid) + '<br/>' :  '';
-		}
-		function htmlBeaconEID(beacon)
-		{
-			return beacon.eid ?
-				'EID: ' + uint8ArrayToString(beacon.eid) + '<br/>' :  '';
-		}
-		function htmlBeaconVoltage(beacon)
-		{
-			return beacon.voltage ?
-				'Voltage: ' + beacon.voltage + '<br/>' :  '';
-		}
-		function htmlBeaconTemperature(beacon)
-		{
-			return beacon.temperature && beacon.temperature != 0x8000 ?
-				'Temperature: ' + beacon.temperature + '<br/>' :  '';
-		}
-		function htmlBeaconRSSI(beacon)
-		{
-			return beacon.rssi ?
-				'RSSI: ' + beacon.rssi + '<br/>' :  '';
-		}
-		function uint8ArrayToString(uint8Array)
-		{
-			function format(x)
-			{
-				var hex = x.toString(16);
-				return hex.length < 2 ? '0' + hex : hex;
-			}
-			var result = '';
-			for (var i = 0; i < uint8Array.length; ++i)
-			{
-				result += format(uint8Array[i]) + ' ';
-			}
-			return result;
-		}
+
+// 		function htmlBeaconName(beacon)
+// 		{
+// 			var name = beacon.name || 'no name';
+// 			return '<strong>' + name + '</strong><br/>';
+// 		}
+// 		function htmlBeaconURL(beacon)
+// 		{
+// 			return beacon.url ?
+// 				'URL: ' + beacon.url + '<br/>' :  '';
+// 		}
+// 		function htmlBeaconURL(beacon)
+// 		{
+// 			return beacon.url ?
+// 				'URL: ' + beacon.url + '<br/>' :  '';
+//         }
+//         function htmlBeaconURL(beacon)
+// 		{
+// 			return beacon.url ?
+// 				'URL: ' + beacon.url + '<br/>' :  '';
+// 		}
+// 		function htmlBeaconNID(beacon)
+// 		{
+// 			return beacon.nid ?
+// 				'NID: ' + uint8ArrayToString(beacon.nid) + '<br/>' :  '';
+// 		}
+// 		function htmlBeaconBID(beacon)
+// 		{
+// 			return beacon.bid ?
+// 				'BID: ' + uint8ArrayToString(beacon.bid) + '<br/>' :  '';
+// 		}
+// 		function htmlBeaconEID(beacon)
+// 		{
+// 			return beacon.eid ?
+// 				'EID: ' + uint8ArrayToString(beacon.eid) + '<br/>' :  '';
+// 		}
+// 		function htmlBeaconVoltage(beacon){
+// 			return beacon.voltage ?
+// 				'Voltage: ' + beacon.voltage + '<br/>' :  '';
+// 		}
+// 		function htmlBeaconTemperature(beacon)
+// 		{
+// 			return beacon.temperature && beacon.temperature != 0x8000 ?
+// 				'Temperature: ' + beacon.temperature + '<br/>' :  '';
+// 		}
+// 		function htmlBeaconRSSI(beacon)
+// 		{
+// 			return beacon.rssi ?
+// 				'RSSI: ' + beacon.rssi + '<br/>' :  '';
+// 		}
+// 		function uint8ArrayToString(uint8Array)
+// 		{
+// 			function format(x)
+// 			{
+// 				var hex = x.toString(16);
+// 				return hex.length < 2 ? '0' + hex : hex;
+// 			}
+// 			var result = '';
+// 			for (var i = 0; i < uint8Array.length; ++i)
+// 			{
+// 				result += format(uint8Array[i]) + ' ';
+// 			}
+// 			return result;
+// 		}
 		function showMessage(text)
 		{
 			document.querySelector('#message').innerHTML = text;
@@ -277,7 +283,7 @@
 		document.addEventListener('deviceready', onDeviceReady, false);
 		// Add back button listener (for Android).
 		document.addEventListener('backbutton', onBackButtonDown, false);
-	})(); // End of closure.
+//}; // End of closure.
 	</script>
 
 </body>

@@ -15,6 +15,9 @@
     },
     "cordova-plugin-console": {
       "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
+    },
+    "cordova-plugin-background-mode": {
+      "PACKAGE_NAME": "com.mydomain.myeddystoneapp"
     }
   },
   "dependent_plugins": {

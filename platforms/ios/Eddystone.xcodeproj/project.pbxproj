@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0207DA571B56EA530066E2B4 /* Images.xcassets */; };
 		1D3623260D0F684500981E51 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* AppDelegate.m */; };
@@ -29,6 +28,9 @@
 		EC6F43AEC44145F3B073FDCA /* APPLocalNotificationOptions.ios9.m in Sources */ = {isa = PBXBuildFile; fileRef = 056514EC7D2F4B3DBCB15549 /* APPLocalNotificationOptions.ios9.m */; };
 		EF9DC3BC46BD4774AB313724 /* UNMutableNotificationContent+APPLocalNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B0167CD9DA9488FBD915DFD /* UNMutableNotificationContent+APPLocalNotification.m */; };
 		F892134EA65148C8B04DD25E /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = BEE4B7602BF74C5A877C22AE /* CDVDevice.m */; };
+		208477B53EDA4BF4A56316BF /* APPBackgroundMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F0B58304554C5786A0E8DE /* APPBackgroundMode.m */; };
+		C263A63170FA4B68B8C74434 /* APPMethodMagic.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A973DFF01246D9B6C6FABB /* APPMethodMagic.m */; };
+		0FD172028F284FA1B7904820 /* appbeep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 13DC10D59EFA4529934522D3 /* appbeep.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +106,11 @@
 		F28E7C16100B4577AC7B8BD0 /* UILocalNotification+APPLocalNotification.ios9.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "UILocalNotification+APPLocalNotification.ios9.h"; path = "de.appplant.cordova.plugin.local-notification/UILocalNotification+APPLocalNotification.ios9.h"; sourceTree = "<group>"; };
 		F399008EB09B4DB48E471931 /* APPAppEventDelegate.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = APPAppEventDelegate.h; path = "cordova-plugin-app-event/APPAppEventDelegate.h"; sourceTree = "<group>"; };
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = Eddystone/config.xml; sourceTree = "<group>"; };
+		87F0B58304554C5786A0E8DE /* APPBackgroundMode.m */ = {isa = PBXFileReference; name = "APPBackgroundMode.m"; path = "cordova-plugin-background-mode/APPBackgroundMode.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		B4A973DFF01246D9B6C6FABB /* APPMethodMagic.m */ = {isa = PBXFileReference; name = "APPMethodMagic.m"; path = "cordova-plugin-background-mode/APPMethodMagic.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		C6728307EBD94FD89D95B2CA /* APPBackgroundMode.h */ = {isa = PBXFileReference; name = "APPBackgroundMode.h"; path = "cordova-plugin-background-mode/APPBackgroundMode.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		60FE20B4F45B4DEEBB178547 /* APPMethodMagic.h */ = {isa = PBXFileReference; name = "APPMethodMagic.h"; path = "cordova-plugin-background-mode/APPMethodMagic.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		13DC10D59EFA4529934522D3 /* appbeep.wav */ = {isa = PBXFileReference; name = "appbeep.wav"; path = "appbeep.wav"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +184,7 @@
 				3047A50E1AB8057F00498E2A /* config */,
 				8D1107310486CEB800E47090 /* Eddystone-Info.plist */,
 				6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */,
+				13DC10D59EFA4529934522D3 /* appbeep.wav */,
 			);
 			name = Resources;
 			path = Eddystone/Resources;
@@ -239,6 +247,10 @@
 				F28E7C16100B4577AC7B8BD0 /* UILocalNotification+APPLocalNotification.ios9.h */,
 				78562AC881ED43A8B19E9B4B /* EVOBLE.m */,
 				66DBCD73E6564B619677B87F /* EVOBLE.h */,
+				87F0B58304554C5786A0E8DE /* APPBackgroundMode.m */,
+				B4A973DFF01246D9B6C6FABB /* APPMethodMagic.m */,
+				C6728307EBD94FD89D95B2CA /* APPBackgroundMode.h */,
+				60FE20B4F45B4DEEBB178547 /* APPMethodMagic.h */,
 			);
 			name = Plugins;
 			path = Eddystone/Plugins;
@@ -335,6 +347,7 @@
 				302D95F214D2391D003F00A1 /* MainViewController.xib in Resources */,
 				0207DA581B56EA530066E2B4 /* Images.xcassets in Resources */,
 				6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */,
+				0FD172028F284FA1B7904820 /* appbeep.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +391,8 @@
 				75AA01C87EF6428DB65C15FF /* UIApplication+APPLocalNotification.ios9.m in Sources */,
 				D3BABCBED8D4482DB72C35BE /* UILocalNotification+APPLocalNotification.ios9.m in Sources */,
 				CC88681669AE45DFA364A6CC /* EVOBLE.m in Sources */,
+				208477B53EDA4BF4A56316BF /* APPBackgroundMode.m in Sources */,
+				C263A63170FA4B68B8C74434 /* APPMethodMagic.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
