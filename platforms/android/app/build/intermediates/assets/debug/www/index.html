@@ -43,70 +43,95 @@
 	<div id="found-beacons"></div>
 
 	<script src="cordova.js"></script>
+	<!--<button onclick="x()">Start Scan</button> -->
 
 	<script>
-	(function()
-	{
-		
-		// Dictionary of beacons.
-		var beacons = {};
-		// Timer that displays list of beacons.
-		var timer = null;
-		function onDeviceReady()
-		{
-			// Start tracking beacons!
-			setTimeout(startScan, 500);
-			// Timer that refreshes the display.
-			timer = setInterval(updateBeaconList, 500);
-			//cordova.plugins.backgroundMode.enable(displayLocalNotification());
-			//displayLocalNotification();
-			//cordova.plugins.backgroundMode.disable();
-		}
-		function onBackButtonDown()
-		{
-			evothings.eddystone.stopScan();
-			navigator.app.exitApp();
-		}
-		function startScan()
-		{
-			showMessage('Starting scan...');
-			evothings.eddystone.startScan(
-				function(beacon)
-				{
-					// Update beacon data.
-					beacon.timeStamp = Date.now();
-					beacons[beacon.address] = beacon;
-				},
-				function(error)
-				{
-					showMessage('Eddystone scan error: ' + error);
-				});
-        }
-		
-		function displayLocalNotification(){
-			if(getSortedBeaconList() != lastScan() && getSortedBeaconList != null){
-				setTimeout(localNotification, 500);
-			}
-		}
-        function localNotification()
-        {
-            window.cordova.plugins.notification.local.schedule({
-                title: 'TNBeacons',
-				firstAt: new Date(new Date().getTime() + 5*1000),
-				every: 1,
-                text: 'Nearby beacons are displayed!',
-                icon: ['file://img/icon.png']
-            });
-        }
+	var beacons = {};
+	var timer = null;
 
-		function test(){
-			cordova.plugins.backgroundMode.setDefaults({
-			title: 'testing app',
-			text: 'test',
-			color: 'F14F4D', // hex format like 'F14F4D'
-			resume: false,
-		})
+	function x(){
+		onDeviceReady();
+	}
+	
+	function onDeviceReady(){
+		// Start tracking beacons!
+		//document.writeln("2");
+		setTimeout(startScan, 500);
+		// Timer that refreshes the display.
+		timer = setInterval(updateBeaconList, 500);
+		//document.writeln(timer);
+		//localNotification();
+		//test();
+		//displayLocalNotification();
+	}
+		// function testNotification()
+        // {
+        //     window.cordova.plugins.notification.local.schedule({
+        //         title: 'Test',
+		// 		firstAt: new Date(new Date().getTime() + 5*1000),
+		// 		every: 1,
+        //         text: 'This is a test!',
+        //         icon: ['file://img/icon.png']
+        //     });
+		// }
+		// function test(){
+		// 	testNotification();
+		// 	var plugin = cordova.plugins.backgroundMode.setDefaults({ silent: true });
+		// 	plugin.setEnabled(!plugin.isEnabled());
+		// }
+////////////////////////////////////////////////////////////////////////
+	function test(){
+		//localNotification();
+		cordova.plugins.backgroundMode.setEnabled(true);
+		//document.writeln("NOT ACTIVE");
+		if(cordova.plugins.backgroundMode.isActive()){
+			//document.writeln("ACTIVE");
 		}
+		cordova.plugins.backgroundMode.setEnabled(false);
+		// 		'activate', function() {
+		// 	app.onModeActivated;
+		// 	cordova.plugins.backgroundMode.disableWebViewOptimizations();
+		// 	cordova.plugins.backgroundMode.moveToBackground();
+		// });
+			// localNotification();
+            // plugin    = cordova.plugins.backgroundMode;
+			// plugin.setDefaults({ color: 'F14F4D' });
+			// plugin.setEnabled(true);
+
+	}
+
+// 		cordova.plugins.backgroundMode.isScreenOff(function(bool) {
+// 			cordova.plugins.backgroundMode.moveToBackground();
+// 	});
+	function startScan(){
+		showMessage('Starting scan...');
+		// document.writeln("SCAN");
+		//var closestBeacon = getSortedBeaconList(beacons);
+		//document.writeln(closestBeacon);
+		evothings.eddystone.startScan(function(beacon){
+			// Update beacon data.
+			beacon.timeStamp = Date.now();
+			beacons[beacon.address] = beacon;
+		}, function(error){
+				showMessage('Eddystone scan error: ' + error);
+		});
+	}
+// 		function displayLocalNotification(){
+// 			if(getSortedBeaconList() != lastScan() && getSortedBeaconList != null){
+// 				setTimeout(localNotification, 500);
+// 			}
+// 		}
+//         function localNotification()
+//         {
+//             window.cordova.plugins.notification.local.schedule({
+//                 title: 'TNBeacons',
+// 				firstAt: new Date(new Date().getTime() + 5*1000),
+// 				every: 1,
+//                 text: 'Test!',
+//                 icon: ['file://img/icon.png']
+//             });
+// 		}
+
 		// Map the RSSI value to a value between 1 and 100.
 		function mapBeaconRSSI(rssi)
 		{
@@ -114,32 +139,6 @@
 			if (rssi < -100) return 100; // Max RSSI
 			return 100 + rssi;
         }
-        
-
-		function displayNotification(){
-			cordova.plugins.backgroundMode.enable();
-			var tenMeters = 393.701;     //inches value for 10 meters
-			forEach(beacons in getSortedBeaconList) {
-				if(beacon.rssi < tenMeters && (beacon.timeStamp - getLastScan(beacon.eid)) > setMinutes(10)) {
-				setLastScan(beacon.eid);
-				localNotification();
-				}
-			}
-
-			setLastScan = function(eid) {
-				lastScanObject[eid] = Date.now();
-			}
-
-			getLastScan = function(eid) {
-				return lastScanObject[eid];
-			}
-		}
-
-		function lastScan(){
-			var lastScanList = [];
-			lastScanList = getSortedBeaconList();
-			return lastScanList;
-		}
 		
 		function getSortedBeaconList(beacons)
 		{
@@ -147,12 +146,10 @@
 			for (var key in beacons)
 			{
 				beaconList.push(beacons[key]);
-            }
-
+			}
+			var closestBeacon = null;
 			beaconList.sort(function(beacon1, beacon2, beacon3)
 			{
-                var closestBeacon = null;
-
                 if(mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon1.rssi) > mapBeaconRSSI(beacon3.rssi)){
                     closestBeacon = mapBeaconRSSI(beacon1.rssi);
                 }
@@ -162,18 +159,19 @@
                 else if(mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon2.rssi) && mapBeaconRSSI(beacon3.rssi) > mapBeaconRSSI(beacon1.rssi)){
                     closestBeacon = mapBeaconRSSI(beacon3.rssi);
                 }
+				showMessage("The closest beacon is " + closestBeacon);
+				
                 return closestBeacon;
+				//return mapBeaconRSSI(beacon1.rssi < mapBeaconRSSI(beacon2.rssi));
 			});
 			return beaconList;
 		}
-		function updateBeaconList()
-		{
-			lastScan();
+		function updateBeaconList(){
 			removeOldBeacons();
 			displayBeacons();
-		}
-		function removeOldBeacons()
-		{
+		 }
+
+		function removeOldBeacons(){
 			var timeNow = Date.now();
 			for (var key in beacons)
 			{
@@ -185,8 +183,8 @@
 				}
 			}
 		}
-		function displayBeacons()
-		{
+
+		function displayBeacons(){
 			var html = '';
 			var sortedList = getSortedBeaconList(beacons);
 			for (var i = 0; i < sortedList.length; ++i)
@@ -207,6 +205,7 @@
 			}
 			document.querySelector('#found-beacons').innerHTML = html;
 		}
+
 		function htmlBeaconName(beacon)
 		{
 			var name = beacon.name || 'no name';
@@ -242,8 +241,7 @@
 			return beacon.eid ?
 				'EID: ' + uint8ArrayToString(beacon.eid) + '<br/>' :  '';
 		}
-		function htmlBeaconVoltage(beacon)
-		{
+		function htmlBeaconVoltage(beacon){
 			return beacon.voltage ?
 				'Voltage: ' + beacon.voltage + '<br/>' :  '';
 		}
@@ -279,7 +277,7 @@
 		document.addEventListener('deviceready', onDeviceReady, false);
 		// Add back button listener (for Android).
 		document.addEventListener('backbutton', onBackButtonDown, false);
-	})(); // End of closure.
+//}; // End of closure.
 	</script>
 
 </body>
