@@ -49,21 +49,21 @@
 	var beacons = {};
 	var timer = null;
 	var active;
-
-	function x(){
-		localNotification();
-		onDeviceReady();
-	}
 	
 	function onDeviceReady(){
 		// Start tracking beacons!
 		//document.writeln("2");
 		test();
-		active = cordova.plugins.backgroundMode.isActive();
-		document.writeln(active);
-		setTimeout(startScan, 500);
-		// Timer that refreshes the display.
-		timer = setInterval(updateBeaconList, 500);
+		//active = cordova.plugins.backgroundMode.isActive();
+		if(active == false){
+			setTimeout(startScan, 500);
+			// Timer that refreshes the display.
+			timer = setInterval(updateBeaconList, 500);
+		}
+		//document.writeln(active);
+		// setTimeout(startScan, 500);
+		// // Timer that refreshes the display.
+		// timer = setInterval(updateBeaconList, 500);
 		//document.writeln(timer);
 		//localNotification();
 		
@@ -90,11 +90,16 @@
 		//localNotification();
 		//document.writeln("BACKGROUND");		
 		cordova.plugins.backgroundMode.setEnabled(true);
-		cordova.plugins.backgroundMode.moveToBackground();
+		//cordova.plugins.backgroundMode.moveToBackground();
 		if(active == true){
 			localNotification();
 			showMessage("Showing background");
 		}
+		// else if(active == false){
+		// 	setTimeout(startScan, 500);
+		// 	// Timer that refreshes the display.
+		// 	timer = setInterval(updateBeaconList, 500);
+		// }
 		cordova.plugins.backgroundMode.setEnabled(false);
 		
 		//cordova.plugins.backgroundMode.moveToBackground();
@@ -122,7 +127,6 @@
 // 			cordova.plugins.backgroundMode.moveToBackground();
 // 	});
 	function startScan(){
-		while(active == true){
 			showMessage('Starting scan...');
 			// document.writeln("SCAN");
 			//var closestBeacon = getSortedBeaconList(beacons);
@@ -134,7 +138,6 @@
 			}, function(error){
 					showMessage('Eddystone scan error: ' + error);
 			});
-		}
 	}
 // 		function displayLocalNotification(){
 // 			if(getSortedBeaconList() != lastScan() && getSortedBeaconList != null){
